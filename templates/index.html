@@ -4,86 +4,114 @@
     <title>CGPA Predictor</title>
 
     <style>
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(to right, #74ebd5, #ACB6E5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+        }
 
-    .box {
-        background: white;
-        padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
-        text-align: center;
-        width: 320px;
-        animation: fadeIn 0.8s ease-in-out;
-    }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1;
+            pointer-events: none;
+        }
 
-    /* 🔥 Big emoji */
-    .emoji {
-        font-size: 60px;
-        margin-bottom: 10px;
-    }
+        .landing {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+        }
 
-    h2 {
-        margin-bottom: 15px;
-        color: #333;
-    }
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
 
-    input {
-        padding: 12px;
-        width: 90%;
-        margin: 10px 0;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        outline: none;
-        transition: 0.3s;
-    }
+        .subtitle {
+            margin-bottom: 20px;
+        }
 
-    input:focus {
-        border-color: #4CAF50;
-        box-shadow: 0 0 5px #4CAF50;
-    }
+        .door {
+            width: 160px;
+            height: 240px;
+            margin: auto;
+            background: linear-gradient(145deg, #8B4513, #5a2d0c);
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
 
-    button {
-        padding: 12px 25px;
-        background: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+        .door:hover {
+            transform: scale(1.05);
+        }
 
-    button:hover {
-        background: #45a049;
-        transform: scale(1.05);
-    }
+        .box {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 320px;
+            position: relative;
+            z-index: 2;
+        }
 
-    h3 {
-        margin-top: 20px;
-        color: #222;
-    }
+        h2 {
+            margin-bottom: 15px;
+        }
 
-    @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(20px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="overlay"></div>
 
-    <!-- 😂 Big Laughing Emoji -->
-    <div class="emoji">😂</div>
+<!-- Landing Screen (hide after prediction OR after click) -->
+<div class="landing {% if prediction is not none %}hidden{% endif %}" id="landing">
+    <div class="title">CGPA Predictor</div>
+    <div class="subtitle">Click the door to continue</div>
+    <div class="door" onclick="openApp()"></div>
+</div>
 
+<!-- Prediction Screen (show always after click OR after prediction) -->
+<div class="box {% if prediction is none %}hidden{% endif %}" id="appBox">
     <h2>CGPA Predictor</h2>
 
     <form method="POST">
@@ -95,8 +123,14 @@
     {% if prediction is not none %}
         <h3>🎯 Predicted CGPA: {{ prediction }}</h3>
     {% endif %}
-
 </div>
+
+<script>
+function openApp() {
+    document.getElementById('landing').classList.add('hidden');
+    document.getElementById('appBox').classList.remove('hidden');
+}
+</script>
 
 </body>
 </html>
